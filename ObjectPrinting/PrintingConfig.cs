@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 
 namespace ObjectPrinting
@@ -36,6 +38,29 @@ namespace ObjectPrinting
                               nestingLevel + 1));
             }
             return sb.ToString();
+        }
+
+        public PrintingConfig<TOwner> ExcludeType<TPropType>()
+        {
+            return this;
+        }
+
+        public PrintingConfig<TOwner> ExcludeProperty<TPropType>(
+            Expression<Func<TOwner, TPropType>> selector)
+        {
+            return this;
+        }
+
+        public PropertyPrintingConfig<TOwner, TPropType> Print<TPropType>()
+        {
+            return new PropertyPrintingConfig<TOwner, TPropType>(this);
+        }
+
+        public PropertyPrintingConfig<TOwner, TPropType> Print<TPropType>(
+            Expression<Func<TOwner, TPropType>> selector)
+        {
+            var property = ((MemberExpression) selector.Body).Member as PropertyInfo;
+            return new PropertyPrintingConfig<TOwner, TPropType>(this, property);
         }
     }
 }
