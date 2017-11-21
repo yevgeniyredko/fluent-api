@@ -1,10 +1,25 @@
+using System;
+
 namespace ObjectPrinting
 {
-    public class ObjectPrinter
-	{
-	    public static PrintingConfig<T> For<T>()
-	    {
-            return new PrintingConfig<T>();
+    public abstract class ObjectPrinter
+    {
+        public static ObjectPrinter<TPropType> For<TPropType>()
+        {
+            return new ObjectPrinter<TPropType>(new PrintingConfig<TPropType>());
         }
-	}
+
+        public static ObjectPrinter<TPropType> For<TPropType>(
+            Func<PrintingConfig<TPropType>, PrintingConfig<TPropType>> configurator)
+        {
+            var config = configurator(new PrintingConfig<TPropType>());
+            return new ObjectPrinter<TPropType>(config);
+        }
+
+        protected static readonly Type[] finalTypes =
+        {
+            typeof(int), typeof(double), typeof(float), typeof(string),
+            typeof(DateTime), typeof(TimeSpan)
+        };
+    }
 }
