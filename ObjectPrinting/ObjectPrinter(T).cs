@@ -23,8 +23,8 @@ namespace ObjectPrinting
 	        if (obj == null)
 	            return "null" + Environment.NewLine;
 	        
-	        if (IsFinalType(obj.GetType()))
-	            return PrintFinalObject(obj) + (nestingLevel == 0 ? Environment.NewLine : "");
+	        if (IsValueType(obj.GetType()))
+	            return PrintFinalObject(obj) + Environment.NewLine;
             
 	        var identation = new string('\t', nestingLevel + 1);
 	        var sb = new StringBuilder();
@@ -39,9 +39,8 @@ namespace ObjectPrinting
 
 	            sb.Append(identation + propertyInfo.Name + " = ");
 	            sb.Append(config.PropertySerializers.ContainsKey(propertyInfo)
-	                ? config.PropertySerializers[propertyInfo](propertyInfo.GetValue(obj))
+	                ? config.PropertySerializers[propertyInfo](propertyInfo.GetValue(obj)) + Environment.NewLine
 	                : PrintToString(propertyInfo.GetValue(obj), nestingLevel + 1));
-	            sb.Append(Environment.NewLine);
 	        }
 	        return sb.ToString();
 	    }
@@ -54,10 +53,10 @@ namespace ObjectPrinting
 	            : obj.ToString();
 	    }
 
-	    private bool IsFinalType(Type type)
+	    private bool IsValueType(Type type)
 	    {
 	        return config.TypeSerializers.ContainsKey(type)
-	               || finalTypes.Contains(type)
+	               || valueTypes.Contains(type)
 	               || type.GetProperties().Length == 0;
 	    }
 	}

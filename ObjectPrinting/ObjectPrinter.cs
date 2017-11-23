@@ -16,7 +16,7 @@ namespace ObjectPrinting
             return new ObjectPrinter<TPropType>(config);
         }
 
-        protected static readonly Type[] finalTypes =
+        protected static readonly Type[] valueTypes =
         {
             typeof(int), typeof(double), typeof(float), typeof(string),
             typeof(DateTime), typeof(TimeSpan)

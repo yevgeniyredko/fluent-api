@@ -52,7 +52,7 @@ namespace ObjectPrinting
                     return propertyInfo;
                 }
             }
-            throw new ArgumentException("selector should be an expression that is " +
+            throw new ArgumentException("Selector should be an expression that is " +
                                         "simple property access", nameof(selector));
         }
 
